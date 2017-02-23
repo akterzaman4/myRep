@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+<project name="my-app" basedir="." default="usage">
+	
+	
+   <property name="us.home" value="${basedir}"/>
+   <property name="us.jars" value="${user.home}.m2/repository/"/>
+   <property name="test.dest" value="${us.home}/build"/>
+   <property name="test.src" value="${us.home}/src"/>
+   <property name="test.reportDir" value="C:\Users\lenovo\my-app>"/>
+
+   <path id="testcase.path">
+       <pathelement location="${test.dest}"/>
+       <fileset dir="${us.jars}">
+       <include name="**/*.jar"/>
+       </fileset>
+   </path>
+   
+   
+	  <target name="setClassPath" unless="test.classpath">
+	      <path id="classpath_jars">
+	      <fileset dir="${us.jars}" includes="*.jar"/>
+	      	</path>
+	  	<pathconvert pathsep=":" 
+	  	
+	  	property="test.classpath"
+	  	refid="classpath_jars"/>
+	  	</target>
+	<target name="init" depends ="setClassPath">
+	 <testamp>
+	 	<format property ="start.time" pattern="mm/dd/yyyy hh:mm aa"/>
+	 	</testamp>
+		<condition property="ANT"
+			value="${env.ANT_HOME}/bin/ant.bat"
+			else ="${env.ANT_HOME}/bin/ant">
+			<os family="windows"/>
+			></condition>
+</target>
+<target name="all">
+</target>	
+<target name="clean">
+<delete dir="${test.dest}"/>
+</target>	
+	
+<target name="complie" depends="init,clean">
+ <delete includeemptydirs="true" quite="true">
+ 	fileset dir ="${test.dest}" includes="**/*"/>
+ </delete>
+	<echo message ="making directory..."> </echo>
+	<mkdir dir="${test.dest}"/>
+	<echo message="classpath-----:${test.classpath}"/>
+	<echo message="compling ..."/>
+	<javac
+	debug="true"
+		destdir="${test.dest}"
+		srcdir="${test.dest}"
+	     target ="1.5"
+	classpath="${test.classpath}"
+	>
+	</javac>
+</target>
+	<target name="build" depends="init"></target>
+	
+	<target name="usage">
+	
+	<echo>
+	ant run will execute the test
+	</echo>
+	
+	</target>
+	<path id ="test.run">
+		<fileset dir ="{ws.jars}" includes="**/*.jar"/>
+	
+	</path>
+	
+	
+	<target name="run">
+	
+	<delete includemptydirs= "true" quite ="true">
+		<fileset dir ="${test.reportDir}"  include ="**/*"/>
+		</delete>
+		<java jar ="{ws.jars}" fork ="true" span ="true" />
+		<junit forth ="yes" half ton></junit>
+		
+	
+	
+	</target>
+	
+	
+	
+	
+	  	
+        <src path="${src.dir}"/>
+	         <classpath refid="master-classpath"/>
+	      </javac>
+	   </target>
+	
+
+   <target name="build" description="Compile source tree java files">
+      <mkdir dir="${build.dir}"/>
+      <javac destdir="${build.dir}" source="1.5" target="1.5">
+         <src path="${src.dir}"/>
+         <classpath refid="master-classpath"/>
+      </javac>
+   </target>
+ 
+   <target name="clean" description="Clean output directories">
+      <delete>
+         <fileset dir="${build.dir}">
+            <include name="**/*.class"/>
+         </fileset>
+      </delete>
+   </target>
+</project>
